@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste de Personalidade - Teoria dos Quatro Tipos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+      background: #f7f7f7;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .pergunta {
+      margin-bottom: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    button {
+      display: block;
+      margin: 30px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    .resultado {
+      background: #e0ffe0;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Teste de Personalidade</h1>
+  <form id="formulario">
+    <div>
+      <label>Seu nome:</label><br>
+      <input type="text" id="nome" required>
+    </div>
+    <div>
+      <label>Seu e-mail:</label><br>
+      <input type="email" id="email" required>
+    </div>
+    <div id="perguntas"></div>
+    <button type="submit">Enviar</button>
+  </form>
+  <div class="resultado" id="resultado" style="display: none;"></div>
+
+  <script>
+    const perguntas = [
+      {
+        texto: "Você costuma questionar as regras impostas?",
+        alternativas: [
+          { texto: "Nunca, sigo sem pensar.", pontos: 1, eixo: "Y" },
+          { texto: "Raramente questiono.", pontos: 2, eixo: "Y" },
+          { texto: "Às vezes, se algo parece errado.", pontos: 3, eixo: "X" },
+          { texto: "Quase sempre, gosto de entender o porquê.", pontos: 4, eixo: "X" },
+        ]
+      },
+      {
+        texto: "Como você lida com tarefas repetitivas?",
+        alternativas: [
+          { texto: "Gosto, são mais fáceis.", pontos: 1, eixo: "Y" },
+          { texto: "Aceito, mas fico entediado.", pontos: 2, eixo: "Y" },
+          { texto: "Procuro melhorar o processo.", pontos: 3, eixo: "X" },
+          { texto: "Tento substituir por algo mais criativo.", pontos: 4, eixo: "X" },
+        ]
+      },
+      {
+        texto: "Você costuma refletir sobre as consequências das suas ações?",
+        alternativas: [
+          { texto: "Não, ajo por impulso.", pontos: 1, eixo: "Y" },
+          { texto: "Às vezes penso, mas ajo rápido.", pontos: 2, eixo: "Y" },
+          { texto: "Geralmente considero os impactos.", pontos: 3, eixo: "X" },
+          { texto: "Sempre analiso com cuidado.", pontos: 4, eixo: "X" },
+        ]
+      },
+      {
+        texto: "Você sente necessidade de se atualizar intelectualmente?",
+        alternativas: [
+          { texto: "Não, já aprendi o suficiente.", pontos: 1, eixo: "Y" },
+          { texto: "Apenas quando necessário.", pontos: 2, eixo: "Y" },
+          { texto: "Sim, leio e estudo com frequência.", pontos: 3, eixo: "X" },
+          { texto: "Tenho sede de conhecimento constantemente.", pontos: 4, eixo: "X" },
+        ]
+      },
+      {
+        texto: "Como você se sente ao errar em algo?",
+        alternativas: [
+          { texto: "Ignoro e sigo.", pontos: 1, eixo: "Y" },
+          { texto: "Fico frustrado, mas esqueço.", pontos: 2, eixo: "Y" },
+          { texto: "Analiso para entender.", pontos: 3, eixo: "X" },
+          { texto: "Procuro extrair o máximo de aprendizado.", pontos: 4, eixo: "X" },
+        ]
+      },
+      {
+        texto: "Você consegue transformar ideias em ações práticas?",
+        alternativas: [
+          { texto: "Tenho muitas ideias, mas não realizo.", pontos: 1, eixo: "X" },
+          { texto: "Às vezes tento, mas falho.", pontos: 2, eixo: "X" },
+          { texto: "Consigo implementar algumas.", pontos: 3, eixo: "Y" },
+          { texto: "Sou excelente em tirar ideias do papel.", pontos: 4, eixo: "Y" },
+        ]
+      },
+      {
+        texto: "Você prefere seguir ou criar processos?",
+        alternativas: [
+          { texto: "Prefiro que me digam o que fazer.", pontos: 1, eixo: "Y" },
+          { texto: "Gosto de ter instruções claras.", pontos: 2, eixo: "Y" },
+          { texto: "Crio adaptações quando necessário.", pontos: 3, eixo: "X" },
+          { texto: "Prefiro desenvolver meus próprios métodos.", pontos: 4, eixo: "X" },
+        ]
+      },
+      {
+        texto: "Qual sua relação com leitura?",
+        alternativas: [
+          { texto: "Quase não leio.", pontos: 1, eixo: "Y" },
+          { texto: "Leio conteúdos curtos ou por obrigação.", pontos: 2, eixo: "Y" },
+          { texto: "Leio quando tenho tempo.", pontos: 3, eixo: "X" },
+          { texto: "Leio por prazer e aprendizado.", pontos: 4, eixo: "X" },
+        ]
+      },
+      {
+        texto: "Você sente que contribui ativamente para a melhoria de algo?",
+        alternativas: [
+          { texto: "Não, só faço o necessário.", pontos: 1, eixo: "Y" },
+          { texto: "Contribuo quando solicitado.", pontos: 2, eixo: "Y" },
+          { texto: "Busco participar e dar ideias.", pontos: 3, eixo: "X" },
+          { texto: "Proponho e lidero mudanças.", pontos: 4, eixo: "X" },
+        ]
+      },
+      {
+        texto: "Como você se sente diante de regras sem sentido aparente?",
+        alternativas: [
+          { texto: "Sigo mesmo assim.", pontos: 1, eixo: "Y" },
+          { texto: "Me incomodo, mas cumpro.", pontos: 2, eixo: "Y" },
+          { texto: "Questiono e busco justificativa.", pontos: 3, eixo: "X" },
+          { texto: "Confronto e proponho revisão.", pontos: 4, eixo: "X" },
+        ]
+      },
+    ];
+
+    const perguntasDiv = document.getElementById('perguntas');
+    perguntas.forEach((p, i) => {
+      const div = document.createElement('div');
+      div.className = 'pergunta';
+      div.innerHTML = `<p>${i + 1}. ${p.texto}</p>` +
+        p.alternativas.map((alt, j) => `
+          <label>
+            <input type="radio" name="q${i}" value="${alt.pontos}|${alt.eixo}" required>
+            ${alt.texto}
+          </label><br>`).join('');
+      perguntasDiv.appendChild(div);
+    });
+
+    document.getElementById('formulario').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const nome = form.nome.value;
+      const email = form.email.value;
+      let totalX = 0, totalY = 0;
+
+      perguntas.forEach((_, i) => {
+        const val = form[`q${i}`].value;
+        const [pontos, eixo] = val.split('|');
+        if (eixo === 'X') totalX += parseInt(pontos);
+        else totalY += parseInt(pontos);
+      });
+
+      let resultado = '', descricao = '';
+      if (totalX >= 30 && totalY >= 30) {
+        resultado = 'Intelectual Funcional';
+        descricao = 'Você combina capacidade intelectual e ação prática com equilíbrio.';
+      } else if (totalX >= 30) {
+        resultado = 'Intelectual Disfuncional';
+        descricao = 'Você tem pensamento crítico, mas dificuldades em aplicar na prática.';
+      } else if (totalY >= 30) {
+        resultado = 'Idiota Funcional';
+        descricao = 'Você executa bem tarefas práticas, mas não se aprofunda criticamente.';
+      } else {
+        resultado = 'Idiota Disfuncional';
+        descricao = 'Você pode ter desafios tanto na execução quanto no pensamento crítico.';
+      }
+
+      const dados = {
+        nome,
+        email,
+        totalX,
+        totalY,
+        resultado,
+        descricao
+      };
+
+      const r = document.getElementById('resultado');
+
+      try {
+        const resposta = await fetch('https://script.google.com/macros/s/AKfycbxl2vVGPx32Wn6PP1zUBXBFCjQsMrDS1ZFx5M3t5Zzy0fGuBGRok9MccDulj_1AAYX_0A/exec', {
+          method: 'POST',
+          body: JSON.stringify(dados),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const texto = await resposta.text();
+        if (texto === 'OK') {
+          r.innerHTML = `<h2>Resultado</h2>
+            <p><strong>Nome:</strong> ${nome}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Intelectualidade (X):</strong> ${totalX}</p>
+            <p><strong>Funcionalidade (Y):</strong> ${totalY}</p>
+            <p><strong>Quadrante:</strong> ${resultado}</p>
+            <p>${descricao}</p>`;
+        } else {
+          r.innerHTML = `<p style='color: red;'>Este e-mail já respondeu ao teste.</p>`;
+        }
+      } catch (err) {
+        r.innerHTML = `<p style='color: red;'>Erro ao enviar os dados: ${err.message}</p>`;
+      }
+
+      r.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
